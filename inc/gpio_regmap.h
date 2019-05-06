@@ -1,9 +1,13 @@
-#ifndef __GPIO__
-#define __GPIO__
+#ifndef __GPIO_REGMAP__
+#define __GPIO_REGMAP__
 
 #include <stdint.h>
-#include <stddef.h>
 
+/*
+ * Register Definitions
+ */
+
+// Function Select Registers 0-4
 struct GPIO_FSEL_bits {
 		unsigned fsel0: 3,
 				 fsel1: 3,
@@ -23,6 +27,7 @@ union GPIO_FSEL_reg {
 		struct GPIO_FSEL_bits fields;
 };
 
+// Function Select Register 5
 struct GPIO_FSEL5_bits {
 		unsigned fsel0: 3,
 				 fsel1: 3,
@@ -109,36 +114,47 @@ union GPIO_ ## UC_NAME ## _reg	{			\
 		struct GPIO_ ## UC_NAME ## _bits fields;	\
 };
 
+// GPIO Set Registers
 TYPE0_REG(SET0, set)
 TYPE1_REG(SET1, set)
 		
+// GPIO Clear Registers
 TYPE0_REG(CLR0, clr)
 TYPE1_REG(CLR1, clr)
 
+// GPIO Pin Level Registers
 TYPE0_REG(LEV0, lev)
 TYPE1_REG(LEV1, lev)
 		
+// Event Detect Status Registers
 TYPE0_REG(EDS0, eds)
 TYPE1_REG(EDS1, eds)
 		
+// Rising Edge Detect Enable Registers
 TYPE0_REG(REN0, ren)
 TYPE1_REG(REN1, ren)
 		
+// Falling Edge Detect Enable Registers
 TYPE0_REG(FEN0, fen)
 TYPE1_REG(FEN1, fen)
 		
+// High Detect Enable Registers
 TYPE0_REG(HEN0, hen)
 TYPE1_REG(HEN1, hen)
 		
+// Low Detect Enable Registers
 TYPE0_REG(LEN0, len)
 TYPE1_REG(LEN1, len)
 		
+// Asynchronous Rising Edge Detect Enable Registers
 TYPE0_REG(AREN0, aren)
 TYPE1_REG(AREN1, aren)
 
+// Asynchronous Falling Edge Detect Enable Registers
 TYPE0_REG(AFEN0, afen)
 TYPE1_REG(AFEN1, afen)
 		
+// GPIO Pull-up/Pull-down Register
 struct GPIO_PUD_bits {
 	unsigned pud: 2,
 			 res: 30;
@@ -146,44 +162,46 @@ struct GPIO_PUD_bits {
 
 union GPIO_PUD_reg {
 		uint32_t reg;
-		struct GPIO_PUD_bits field;
+		struct GPIO_PUD_bits fields;
 };
 
+// GPIO PUD Clock Registers
 TYPE0_REG (PUDCLK0, pudclk)
 TYPE1_REG (PUDCLK1, pudclk)
 
-#define TYPE0_REG_NAME (NAME) volatile union GPIO_ ## NAME ## _reg*
-#define TYPE1_REG_NAME (NAME) volatile union GPIO_ ## NAME ## _reg*
+#define TYPE0_REG_NAME(NAME) volatile union GPIO_ ## NAME ## _reg*
+#define TYPE1_REG_NAME(NAME) volatile union GPIO_ ## NAME ## _reg*
 
 #define GPIO_BASE 		0x7e200000
-#define GPIO_FSEL0		(*(volatile union GPIO_FSEL_reg*) GPIO_BASE + 0x00)
-#define GPIO_FSEL1		(*(volatile union GPIO_FSEL_reg*) GPIO_BASE + 0x04) 
-#define GPIO_FSEL2		(*(volatile union GPIO_FSEL_reg*) GPIO_BASE + 0x08)
-#define GPIO_FSEL3 		(*(volatile union GPIO_FSEL_reg*) GPIO_BASE + 0x0c)
-#define GPIO_FSEL4 		(*(volatile union GPIO_FSEL_reg*) GPIO_BASE + 0x10)
-#define GPIO_FSEL5 		(*(volatile union GPIO_FSEL5_reg*) GPIO_BASE + 0x14)
-#define GPIO_SET0		(*(TYPE0_REG_NAME (SET0)) GPIO_BASE + 0x1c)
-#define GPIO_SET1 		(*(TYPE1_REG_NAME (SET1)) GPIO_BASE + 0x20)
-#define GPIO_CLR0 		(*(TYPE0_REG_NAME (CLR0)) GPIO_BASE + 0x28)
-#define GPIO_CLR1 		(*(TYPE1_REG_NAME (CLR1)) GPIO_BASE + 0x2c)
-#define GPIO_LEV0		(*(TYPE0_REG_NAME (LEV0)) GPIO_BASE + 0x34)
-#define GPIO_LEV1		(*(TYPE1_REG_NAME (LEV1)) GPIO_BASE + 0x38)
-#define GPIO_EDS0 		(*(TYPE0_REG_NAME (EDS0)) GPIO_BASE + 0x40)
-#define GPIO_EDS1		(*(TYPE1_REG_NAME (EDS1)) GPIO_BASE + 0x44)
-#define GPIO_REN0 		(*(TYPE0_REG_NAME (REN0)) GPIO_BASE + 0x4c)
-#define GPIO_REN1 		(*(TYPE1_REG_NAME (REN1)) GPIO_BASE + 0x50)
-#define GPIO_FEN0 		(*(TYPE0_REG_NAME (FEN0)) GPIO_BASE + 0x58)
-#define GPIO_FEN1 		(*(TYPE1_REG_NAME (FEN1)) GPIO_BASE + 0x5c)
-#define GPIO_HEN0 		(*(TYPE0_REG_NAME (HEN0)) GPIO_BASE + 0x64)
-#define GPIO_HEN1		(*(TYPE1_REG_NAME (HEN1)) GPIO_BASE + 0x68)
-#define GPIO_LEN0 		(*(TYPE0_REG_NAME (LEN0)) GPIO_BASE + 0x70)
-#define GPIO_LEN1 		(*(TYPE1_REG_NAME (LEN1)) GPIO_BASE + 0x74)
-#define GPIO_AREN0 		(*(TYPE0_REG_NAME (AREN0)) GPIO_BASE + 0x7c)
-#define GPIO_AREN1		(*(TYPE1_REG_NAME (AREN1)) GPIO_BASE + 0x80)
-#define GPIO_AFEN0 		(*(TYPE0_REG_NAME (AFEN0)) GPIO_BASE + 0x88)
-#define GPIO_AFEN1		(*(TYPE1_REG_NAME (AFEN1)) GPIO_BASE + 0x8c)
-#define GPIO_PUD		(*(volatile union GPIO_PUD_reg*) GPIO_BASE + 0x94)
-#define GPIO_PUDCLK0	(*(TYPE0_REG_NAME (PUDCLK0)) GPIO_BASE + 0x98) 
-#define GPIO_PUDCLK1	(*(TYPE1_REG_NAME (PUDCLK1)) GPIO_BASE + 0x9c)
+#define GPIO_FSEL0		(*(volatile union GPIO_FSEL_reg*) 	(GPIO_BASE + 0x00))
+#define GPIO_FSEL1		(*(volatile union GPIO_FSEL_reg*) 	(GPIO_BASE + 0x04)) 
+#define GPIO_FSEL2		(*(volatile union GPIO_FSEL_reg*) 	(GPIO_BASE + 0x08))
+#define GPIO_FSEL3 		(*(volatile union GPIO_FSEL_reg*) 	(GPIO_BASE + 0x0c))
+#define GPIO_FSEL4 		(*(volatile union GPIO_FSEL_reg*) 	(GPIO_BASE + 0x10))
+#define GPIO_FSEL5 		(*(volatile union GPIO_FSEL5_reg*) 	(GPIO_BASE + 0x14))
+#define GPIO_SET0		(*(TYPE0_REG_NAME (SET0)) 			(GPIO_BASE + 0x1c))
+#define GPIO_SET1 		(*(TYPE1_REG_NAME (SET1)) 			(GPIO_BASE + 0x20))
+#define GPIO_CLR0 		(*(TYPE0_REG_NAME (CLR0)) 			(GPIO_BASE + 0x28))
+#define GPIO_CLR1 		(*(TYPE1_REG_NAME (CLR1)) 			(GPIO_BASE + 0x2c))
+#define GPIO_LEV0		(*(TYPE0_REG_NAME (LEV0)) 			(GPIO_BASE + 0x34))
+#define GPIO_LEV1		(*(TYPE1_REG_NAME (LEV1)) 			(GPIO_BASE + 0x38))
+#define GPIO_EDS0 		(*(TYPE0_REG_NAME (EDS0)) 			(GPIO_BASE + 0x40))
+#define GPIO_EDS1		(*(TYPE1_REG_NAME (EDS1)) 			(GPIO_BASE + 0x44))
+#define GPIO_REN0 		(*(TYPE0_REG_NAME (REN0)) 			(GPIO_BASE + 0x4c))
+#define GPIO_REN1 		(*(TYPE1_REG_NAME (REN1)) 			(GPIO_BASE + 0x50))
+#define GPIO_FEN0 		(*(TYPE0_REG_NAME (FEN0)) 			(GPIO_BASE + 0x58))
+#define GPIO_FEN1 		(*(TYPE1_REG_NAME (FEN1)) 			(GPIO_BASE + 0x5c))
+#define GPIO_HEN0 		(*(TYPE0_REG_NAME (HEN0)) 			(GPIO_BASE + 0x64))
+#define GPIO_HEN1		(*(TYPE1_REG_NAME (HEN1)) 			(GPIO_BASE + 0x68))
+#define GPIO_LEN0 		(*(TYPE0_REG_NAME (LEN0)) 			(GPIO_BASE + 0x70))
+#define GPIO_LEN1 		(*(TYPE1_REG_NAME (LEN1)) 			(GPIO_BASE + 0x74))
+#define GPIO_AREN0 		(*(TYPE0_REG_NAME (AREN0)) 			(GPIO_BASE + 0x7c))
+#define GPIO_AREN1		(*(TYPE1_REG_NAME (AREN1)) 			(GPIO_BASE + 0x80))
+#define GPIO_AFEN0 		(*(TYPE0_REG_NAME (AFEN0)) 			(GPIO_BASE + 0x88))
+#define GPIO_AFEN1		(*(TYPE1_REG_NAME (AFEN1)) 			(GPIO_BASE + 0x8c))
+#define GPIO_PUD		(*(volatile union GPIO_PUD_reg*) 	(GPIO_BASE + 0x94))
+#define GPIO_PUDCLK0	(*(TYPE0_REG_NAME (PUDCLK0)) 		(GPIO_BASE + 0x98)) 
+#define GPIO_PUDCLK1	(*(TYPE1_REG_NAME (PUDCLK1)) 		(GPIO_BASE + 0x9c))
 
 #endif
+

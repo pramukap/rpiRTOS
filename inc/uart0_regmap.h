@@ -1,8 +1,7 @@
-#ifndef __UART0__
-#define __UART0__
+#ifndef __UART0_REGMAP__
+#define __UART0_REGMAP__
 
 #include <stdint.h>
-#include <stddef.h>
 
 // bit field for register
 // first item in bit field list corresponds to least significant bits
@@ -36,7 +35,7 @@ struct U0_RSRECR_bits {
 
 union U0_RSRECR_reg {
 	uint32_t reg;
-	struct U0_RSRECR_bits field;	
+	struct U0_RSRECR_bits fields;	
 };	
 
 // Flag Register
@@ -55,7 +54,7 @@ struct U0_FR_bits {
 
 union U0_FR_reg {
 	uint32_t reg;
-	struct U0_FR_bits field;	
+	struct U0_FR_bits fields;	
 };	
 
 // Integer Baud Rate Divisor Register
@@ -66,7 +65,7 @@ struct U0_IBRD_bits {
 
 union U0_IBRD_reg {
 	uint32_t reg;
-	struct U0_IBRD_bits field;	
+	struct U0_IBRD_bits fields;	
 };	
 
 // Fractional Baud Rate Divisor Register
@@ -77,7 +76,7 @@ struct U0_FBRD_bits {
 
 union U0_FBRD_reg {
 	uint32_t reg;
-	struct U0_FBRD_bits field;	
+	struct U0_FBRD_bits fields;	
 };	
 
 // Line Control Register
@@ -94,7 +93,7 @@ struct U0_LCRH_bits {
 
 union U0_LCRH_reg {
 	uint32_t reg;
-	struct U0_LCRH_bits field;	
+	struct U0_LCRH_bits fields;	
 };	
 
 // Control Register
@@ -117,7 +116,7 @@ struct U0_CR_bits {
 
 union U0_CR_reg {
 	uint32_t reg;
-	struct U0_CR_bits field;	
+	struct U0_CR_bits fields;	
 };	
 
 // Interrupt FIFO Level Select Register
@@ -131,7 +130,7 @@ struct U0_IFLS_bits {
 
 union U0_IFLS_reg {
 	uint32_t reg;
-	struct U0_IFLS_bits field;	
+	struct U0_IFLS_bits fields;	
 };	
 
 // Interrupt Mask Set/Clear Register
@@ -152,7 +151,7 @@ struct U0_IMSC_bits {
 
 union U0_IMSC_reg {
 	uint32_t reg;
-	struct U0_IMSC_bits field;	
+	struct U0_IMSC_bits fields;	
 };	
 
 // Raw Interrupt Status Register
@@ -173,7 +172,7 @@ struct U0_RIS_bits {
 
 union U0_RIS_reg {
 	uint32_t reg;
-	struct U0_RIS_bits field;	
+	struct U0_RIS_bits fields;	
 };	
 
 // Masked Interrupt Status Register
@@ -194,7 +193,7 @@ struct U0_MIS_bits {
 
 union U0_MIS_reg {
 	uint32_t reg;
-	struct U0_MIS_bits field;	
+	struct U0_MIS_bits fields;	
 };	
 
 // Interrupt Clear Register
@@ -215,7 +214,7 @@ struct U0_ICR_bits {
 
 union U0_ICR_reg {
 	uint32_t reg;
-	struct U0_ICR_bits field;	
+	struct U0_ICR_bits fields;	
 };	
 
 // Test Control Register
@@ -227,7 +226,7 @@ struct U0_ITCR_bits {
 
 union U0_ITCR_reg {
 	uint32_t reg;
-	struct U0_ITCR_bits field;	
+	struct U0_ITCR_bits fields;	
 };	
 
 // Test Control Register
@@ -240,7 +239,7 @@ struct U0_ITIP_bits {
 
 union U0_ITIP_reg {
 	uint32_t reg;
-	struct U0_ITIP_bits field;	
+	struct U0_ITIP_bits fields;	
 };	
 
 // Test Control Register
@@ -260,7 +259,7 @@ struct U0_ITOP_bits {
 
 union U0_ITOP_reg {
 	uint32_t reg;
-	struct U0_ITOP_bits field;	
+	struct U0_ITOP_bits fields;	
 };	
 
 // Test Data Register
@@ -271,25 +270,25 @@ struct U0_TDR_bits {
 
 union U0_TDR_reg {
 	uint32_t reg;
-	struct U0_TDR_bits field;	
+	struct U0_TDR_bits fields;	
 };	
 
 #define UART0_BASE 		0x7e20100
-#define UART0_DR		(* (volatile union U0_DR_reg *)		UART0_BASE + 0x00)
-#define UART0_RSRECR	(* (volatile union U0_RSRECR_reg *)	UART0_BASE + 0x04)
-#define UART0_FR		(* (volatile union U0_FR_reg *)		UART0_BASE + 0x18)
-#define UART0_IBRD		(* (volatile union U0_IBRD_reg *)	UART0_BASE + 0x24)
-#define UART0_FBRD		(* (volatile union U0_FBRD_reg *)	UART0_BASE + 0x28)
-#define UART0_LCRH		(* (volatile union U0_LCRH_reg *)	UART0_BASE + 0x2c)
-#define UART0_CR		(* (volatile union U0_CR_reg *)		UART0_BASE + 0x30)
-#define UART0_IFLS		(* (volatile union U0_IFLS_reg *)	UART0_BASE + 0x34)
-#define UART0_IMSC		(* (volatile union U0_IMSC_reg *)	UART0_BASE + 0x38)
-#define UART0_RIS		(* (volatile union U0_RIS_reg *)	UART0_BASE + 0x3c)
-#define UART0_MIS		(* (volatile union U0_MIS_reg *)	UART0_BASE + 0x30)
-#define UART0_ICR		(* (volatile union U0_ICR_reg *)	UART0_BASE + 0x44)
-#define UART0_ITCR		(* (volatile union U0_ITCR_reg *)	UART0_BASE + 0x80)
-#define UART0_ITIP		(* (volatile union U0_ITIP_reg *)	UART0_BASE + 0x84)
-#define UART0_ITOP		(* (volatile union U0_ITOP_reg *)	UART0_BASE + 0x88)
-#define UART0_TDR 		(* (volatile union U0_TDR_reg *)	UART0_BASE + 0x8c)
+#define UART0_DR		(* (volatile union U0_DR_reg *)		(UART0_BASE + 0x00))
+#define UART0_RSRECR	(* (volatile union U0_RSRECR_reg *)	(UART0_BASE + 0x04))
+#define UART0_FR		(* (volatile union U0_FR_reg *)		(UART0_BASE + 0x18))
+#define UART0_IBRD		(* (volatile union U0_IBRD_reg *)	(UART0_BASE + 0x24))
+#define UART0_FBRD		(* (volatile union U0_FBRD_reg *)	(UART0_BASE + 0x28))
+#define UART0_LCRH		(* (volatile union U0_LCRH_reg *)	(UART0_BASE + 0x2c))
+#define UART0_CR		(* (volatile union U0_CR_reg *)		(UART0_BASE + 0x30))
+#define UART0_IFLS		(* (volatile union U0_IFLS_reg *)	(UART0_BASE + 0x34))
+#define UART0_IMSC		(* (volatile union U0_IMSC_reg *)	(UART0_BASE + 0x38))
+#define UART0_RIS		(* (volatile union U0_RIS_reg *)	(UART0_BASE + 0x3c))
+#define UART0_MIS		(* (volatile union U0_MIS_reg *)	(UART0_BASE + 0x30))
+#define UART0_ICR		(* (volatile union U0_ICR_reg *)	(UART0_BASE + 0x44))
+#define UART0_ITCR		(* (volatile union U0_ITCR_reg *)	(UART0_BASE + 0x80))
+#define UART0_ITIP		(* (volatile union U0_ITIP_reg *)	(UART0_BASE + 0x84))
+#define UART0_ITOP		(* (volatile union U0_ITOP_reg *)	(UART0_BASE + 0x88))
+#define UART0_TDR 		(* (volatile union U0_TDR_reg *)	(UART0_BASE + 0x8c))
 
 #endif
