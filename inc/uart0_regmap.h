@@ -273,7 +273,7 @@ union U0_TDR_reg {
 	struct U0_TDR_bits fields;	
 };	
 
-#define UART0_BASE 		0x7e20100
+#define UART0_BASE 		0x7e201000
 #define UART0_DR		(* (volatile union U0_DR_reg *)		(UART0_BASE + 0x00))
 #define UART0_RSRECR	(* (volatile union U0_RSRECR_reg *)	(UART0_BASE + 0x04))
 #define UART0_FR		(* (volatile union U0_FR_reg *)		(UART0_BASE + 0x18))
