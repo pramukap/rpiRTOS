@@ -1,3 +1,4 @@
+// Taken from u/jsandler18's raspi os repo on github
 // To keep this in the first portion of the binary.
 .section ".text.boot"
 
