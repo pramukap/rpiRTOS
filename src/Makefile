@@ -5,6 +5,7 @@ CC=arm-none-eabi-gcc
 OBJCPY=arm-none-eabi-objcopy
 
 LSCRIPT=${BPATH}/linker.ld
+OPTIMIZATION_LVL=-O0
 
 ROOT=..
 IPATH=${ROOT}/inc
@@ -14,7 +15,7 @@ CFLAGS=-mcpu=arm1176jzf-s	\
 	   -fpic				\
 	   -ffreestanding		\
 	   -std=gnu99			\
-	   -O2					\
+	   ${OPTIMIZATION_LVL}	\
 	   -Wall				\
 	   -Wextra				\
 	   ${patsubst %,-I%,${subst :, ,${IPATH}}}	# borrowed directly from Tivaware Makefile
@@ -26,7 +27,7 @@ AFLAGS=-mcpu=arm1176jzf-s	\
 
 LFLAGS=-T ${LSCRIPT}		\
 	   -ffreestanding		\
-	   -O2					\
+	   ${OPTIMIZATION_LVL}	\
 	   -nostdlib
 
 MAIN=kernel
@@ -61,6 +62,9 @@ ${BPATH}/${MAIN}.elf: ${BPATH}/boot.o
 ${BPATH}/${MAIN}.o: ${MAIN}.c
 ${BPATH}/uart0.o: uart0.c
 ${BPATH}/boot.o: boot.s
+
+tty:
+	dmesg | grep tty 
 
 clean:
 	rm ${BPATH}/*.o ${BPATH}/*.elf ${BPATH}/*.img
