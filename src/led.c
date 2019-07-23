@@ -5,15 +5,10 @@ void led_init (void) {
 }
 
 void led_toggle (void) {
-//	if ((GPIO_LEV1 & (1 << 15))) {		// read state of led
-//		GPIO_CLR1 |= 1 << 15;	// turn led on
-//	} else {
-//		GPIO_SET1 |= 1 << 15;	// turn led off
-//	}
-
-	GPIO_CLR1 |= 1 << 15;
-	for (int i = 0; i < 500000; i++) {}
-	GPIO_SET1 |= 1 << 15;
-	for (int i = 0; i < 500000; i++) {}
+	if (GPIO_LEV1 & (1 << LED_BIT)) {		// read state of led
+		GPIO_CLR1 |= 1 << LED_BIT;	// turn led on
+	} else {
+		GPIO_SET1 |= 1 << LED_BIT;	// turn led off
+	}
 }
 

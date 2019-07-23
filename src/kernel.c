@@ -1,7 +1,4 @@
-//#include "uart0.h"
-#include "led.h"
-
-volatile uint32_t i;
+#include "kernel.h"
 
 int main () {
 //	char c;
@@ -12,11 +9,8 @@ int main () {
 //		uart0_putString ("Hello World!\n\r");
 //		c = uart0_getChar ();
 //		uart0_putChar (c);
-//		led_toggle ();
-		for (i = 0; i < 500000; i++);
-		GPIO_SET1 = 1 << 15;
-		for (i = 0; i < 500000; i++);
-		GPIO_CLR1 = 1 << 15;
+		led_toggle ();
+        for (delayCount = 0; delayCount < 500000; delayCount++);
 	}
 
 	return 0;
