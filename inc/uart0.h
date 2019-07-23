@@ -1,5 +1,5 @@
-#ifndef __UART0__
-#define __UART0__
+#ifndef UART0_H
+#define UART0_H
 
 #include <stdint.h>
 #include "uart0_regmap.h"
