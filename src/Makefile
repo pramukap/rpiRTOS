@@ -5,31 +5,47 @@ CC=arm-none-eabi-gcc
 OBJCPY=arm-none-eabi-objcopy
 
 LSCRIPT=${BPATH}/linker.ld
-OPTIMIZATION_LVL=-O0
+OPTIMIZATION_LVL=-O2
 
 ROOT=..
 IPATH=${ROOT}/inc
 BPATH=${ROOT}/build
 
-CFLAGS=-mcpu=arm1176jzf-s	\
-	   -fpic				\
-	   -ffreestanding		\
-	   -std=gnu99			\
-	   ${OPTIMIZATION_LVL}	\
-	   -Wall				\
-	   -Wextra				\
-	   ${patsubst %,-I%,${subst :, ,${IPATH}}}	# borrowed directly from Tivaware Makefile
+CFLAGS=	-mfpu=vfp			\
+		-mfloat-abi=hard	\
+		-march=armv6zk		\
+		-mtune=arm1176jzf-s	\
+		-nostartfiles		\
+	   	${OPTIMIZATION_LVL}	\
+	   	-Wall				\
+	   	-Wextra				\
+	   	${patsubst %,-I%,${subst :, ,${IPATH}}}	# borrowed directly from Tivaware Makefile
+#		-mcpu=arm1176jzf-s	\	
+#	   	-fpic				\
+#	   	-ffreestanding		\
+#	   	-std=gnu99			
 
-AFLAGS=-mcpu=arm1176jzf-s	\
-	   -fpic				\
-	   -ffreestanding		\
-	   ${patsubst %,-I%,${subst :, ,${IPATH}}} # borrowed directly from Tivaware Makefile
+AFLAGS=	-mfpu=vfp			\
+		-mfloat-abi=hard	\
+		-march=armv6zk		\
+		-mtune=arm1176jzf-s	\
+		-nostartfiles		\
+	   	${patsubst %,-I%,${subst :, ,${IPATH}}} # borrowed directly from Tivaware Makefile
+#		-mcpu=arm1176jzf-s	\
+#	   	-fpic				\
+#	   	-ffreestanding		\
 
-LFLAGS=-T ${LSCRIPT}		\
-	   -ffreestanding		\
-	   ${OPTIMIZATION_LVL}	\
-	   -nostdlib
+#LFLAGS=-T ${LSCRIPT}		\
+#	   -ffreestanding		\
+#	   ${OPTIMIZATION_LVL}	\
+#	   -nostdlib
 
+LFLAGS=	-mfpu=vfp			\
+		-mfloat-abi=hard	\
+		-march=armv6zk		\
+		-mtune=arm1176jzf-s	\
+		-nostartfiles		\
+	   	
 MAIN=kernel
 
 # generate OS image
@@ -56,15 +72,20 @@ all: ${BPATH}/${MAIN}.elf
 #${BPATH}/${MAIN}.img: ${BPATH}/${MAIN}.elf
 
 ${BPATH}/${MAIN}.elf: ${BPATH}/${MAIN}.o
-${BPATH}/${MAIN}.elf: ${BPATH}/uart0.o
-${BPATH}/${MAIN}.elf: ${BPATH}/boot.o
+#${BPATH}/${MAIN}.elf: ${BPATH}/boot.o
+#${BPATH}/${MAIN}.elf: ${BPATH}/uart0.o
+${BPATH}/${MAIN}.elf: ${BPATH}/led.o
 
 ${BPATH}/${MAIN}.o: ${MAIN}.c
-${BPATH}/uart0.o: uart0.c
-${BPATH}/boot.o: boot.s
+#${BPATH}/boot.o: boot.s
+#${BPATH}/uart0.o: uart0.c
+${BPATH}/led.o: led.c
 
 tty:
 	dmesg | grep tty 
+
+serial:
+	sudo minicom -s
 
 clean:
 	rm ${BPATH}/*.o ${BPATH}/*.elf ${BPATH}/*.img
