@@ -73,12 +73,12 @@ all: ${BPATH}/${MAIN}.elf
 
 ${BPATH}/${MAIN}.elf: ${BPATH}/${MAIN}.o
 #${BPATH}/${MAIN}.elf: ${BPATH}/boot.o
-#${BPATH}/${MAIN}.elf: ${BPATH}/uart0.o
+${BPATH}/${MAIN}.elf: ${BPATH}/uart0.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/led.o
 
 ${BPATH}/${MAIN}.o: ${MAIN}.c
 #${BPATH}/boot.o: boot.s
-#${BPATH}/uart0.o: uart0.c
+${BPATH}/uart0.o: uart0.c
 ${BPATH}/led.o: led.c
 
 tty:
