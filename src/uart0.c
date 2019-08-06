@@ -3,6 +3,7 @@
 #include "gpio.h"
 
 void uart0_init (void) {
+    // Disable UART0
 	UART0_CR &= ~(1 << 0);		
 
 	// disable pull-down/pull up resistors on tx/rx pins
@@ -19,8 +20,8 @@ void uart0_init (void) {
     GPIO_FSEL1 |= FSEL_ALT0 << FSEL_FIELD5; 
 
 	// set baud rate (115200 baud, 3078144 Hz)
-//	UART0_IBRD = 1;
-//	UART0_FBRD = 62;
+	UART0_IBRD = 1;
+	UART0_FBRD = 40;
 
 	// set packet options
 	UART0_LCRH = 0x00000000;	// start with everything off
@@ -31,10 +32,8 @@ void uart0_init (void) {
 
 //	UART0_ICR.reg = 0x0000007F2; // clear all interrupts
 
-	UART0_CR &= ~(1 << 0);	// disable uart 
 	// flush fifos in order to program ctrl reg
 	UART0_LCRH &= ~(1 << 4);
-
 	// reenable fifos
 	UART0_LCRH |= 1 << 4;
 
@@ -45,8 +44,9 @@ void uart0_init (void) {
 
 	// program ctrl reg
 	UART0_CR = 0x00000000;	// start with everything off
-//	UART0_CR |= 1 << 9;	// enable rx 
+	UART0_CR |= 1 << 9;	// enable rx 
 	UART0_CR |= 1 << 8;	// enable tx 
+//    UART0_CR |= 1 << 7;	// enable loopback
 	UART0_CR |= 1 << 0; // enable uart
 
 }
@@ -58,10 +58,9 @@ void uart0_putChar (char c) {
 }
 
 char uart0_getChar (void) {
-	//while (UART0_FR.fields.rxfe) {}
+	while (UART0_FR & (1 << 4));
 
-	//return UART0_DR.fields.data;
-    return 0;
+	return UART0_DR & 0x0FF; // Return 8 bits of data, and exclude error bits
 }
 
 void uart0_putString (char *str) {
@@ -75,6 +74,6 @@ void uart0_putString (char *str) {
 }
 
 void uart0_getString (char *str, uint32_t maxLength) {
-	for (uint32_t i = 0; i < maxLength && (str[i] = uart0_getChar ()) != '\0'; i++) {}
+	for (uint32_t i = 0; i < maxLength && (str[i] = uart0_getChar ()) != '\0'; i++);
 }
 

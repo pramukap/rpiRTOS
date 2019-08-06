@@ -81,6 +81,10 @@ ${BPATH}/${MAIN}.o: ${MAIN}.c
 ${BPATH}/uart0.o: uart0.c
 ${BPATH}/led.o: led.c
 
+load:
+	rm ../build/disk/kernel.img
+	cp ../build/kernel.img ../build/disk/
+
 tty:
 	dmesg | grep tty 
 
