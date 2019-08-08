@@ -1,5 +1,13 @@
+/*
+ * Author:          Pramuka Perera
+ * Last Updated:    5 August 2019
+ * Description:     Commonly used code
+ */
+
 #ifndef COMMON_H
 #define COMMON_H
+
+#include <stdint.h>
 
 #define SUCCESS 0
 #define FAILURE 1
@@ -12,6 +20,8 @@
 
 #define CLR		0
 #define SET		1
+
+char bitToChar (uint32_t bit);
 
 #endif 
 

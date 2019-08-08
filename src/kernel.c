@@ -1,8 +1,10 @@
-#include "kernel.h"
+/*
+ * Author:          Pramuka Perera
+ * Last Updated:    5 August 2019
+ * Description:     OS Kernel
+ */
 
-char bitToChar (int bit) {
-    return (char)(bit + '0');
-}
+#include "kernel.h"
 
 int main () {
    char c; 

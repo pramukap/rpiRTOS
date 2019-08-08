@@ -1,19 +1,16 @@
+/*
+ * Author:          Pramuka Perera
+ * Last Updated:    5 August 2019
+ * Description:     Talk to laptop console via UART
+ */
+
 #include "common.h"
 #include "uart0.h"
 #include "gpio.h"
 
 void uart0_init (void) {
     // Disable UART0
-	UART0_CR &= ~(1 << 0);		
-
-	// disable pull-down/pull up resistors on tx/rx pins
-//	GPIO_PUD.fields.pud = PUD_DISABLE;  
-//	for (int i = 0; i < 200; i++) {}	// wait 150 cycles
-//	GPIO_PUDCLK0.fields.pudclk14 = ON;
-//	GPIO_PUDCLK0.fields.pudclk15 = ON;
-//	for (int i = 0; i < 200; i++) {}	// wait 150 cycles
-//	GPIO_PUDCLK0.fields.pudclk14 = OFF;
-//	GPIO_PUDCLK0.fields.pudclk15 = OFF;
+	UART0_CR &= ~(1 << UART0_CR_UARTEN);		
 
     // set alternate function 0
     GPIO_FSEL1 |= FSEL_ALT0 << FSEL_FIELD4; 
@@ -25,40 +22,34 @@ void uart0_init (void) {
 
 	// set packet options
 	UART0_LCRH = 0x00000000;	// start with everything off
-	UART0_LCRH |= WLEN_8 << 5;	// data length 8 bits
-
-// 	UART0_IMSC.reg = 0x00000000; // start with everything off
-// 	UART0_IMSC.reg = 0x0000007F2; // mask all interrupts
-
-//	UART0_ICR.reg = 0x0000007F2; // clear all interrupts
+	UART0_LCRH |= WLEN_8 << UART0_LCRH_WLEN;	// data length 8 bits
 
 	// flush fifos in order to program ctrl reg
-	UART0_LCRH &= ~(1 << 4);
+	UART0_LCRH &= ~(1 << UART0_LCRH_FEN);
+
 	// reenable fifos
-	UART0_LCRH |= 1 << 4;
+	UART0_LCRH |= 1 << UART0_LCRH_FEN;
 
     // disable sticky parity, parity, and break
-    UART0_LCRH &= ~(1 << 7);
-    UART0_LCRH &= ~(1 << 1);
-    UART0_LCRH &= ~(1 << 0);
+    UART0_LCRH &= ~(1 << UART0_LCRH_STICKY_PARITY);
+    UART0_LCRH &= ~(1 << UART0_LCRH_PARITY);
+    UART0_LCRH &= ~(1 << UART0_LCRH_BREAK);
 
 	// program ctrl reg
 	UART0_CR = 0x00000000;	// start with everything off
-	UART0_CR |= 1 << 9;	// enable rx 
-	UART0_CR |= 1 << 8;	// enable tx 
-//    UART0_CR |= 1 << 7;	// enable loopback
-	UART0_CR |= 1 << 0; // enable uart
-
+	UART0_CR |= 1 << UART0_CR_RXE;	// enable rx 
+	UART0_CR |= 1 << UART0_CR_TXE;	// enable tx 
+	UART0_CR |= 1 << UART0_CR_UARTEN; // enable uart
 }
 
 void uart0_putChar (char c) {
-	while (UART0_FR & (1 << 5));
+	while (UART0_FR & (1 << UART0_FR_TXFF));
 
 	UART0_DR = c;
 }
 
 char uart0_getChar (void) {
-	while (UART0_FR & (1 << 4));
+	while (UART0_FR & (1 << UART0_FR_RXFE));
 
 	return UART0_DR & 0x0FF; // Return 8 bits of data, and exclude error bits
 }
@@ -74,6 +65,6 @@ void uart0_putString (char *str) {
 }
 
 void uart0_getString (char *str, uint32_t maxLength) {
-	for (uint32_t i = 0; i < maxLength && (str[i] = uart0_getChar ()) != '\0'; i++);
+	for (uint32_t i = 0; i < maxLength && (str[i] = uart0_getChar ()) != '\r'; i++);
 }
 

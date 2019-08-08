@@ -1,3 +1,9 @@
+/*
+ * Author:          Pramuka Perera
+ * Last Updated:    5 August 2019
+ * Description:     
+ */
+
 #ifndef UART0_REGMAP_H
 #define UART0_REGMAP_H
 

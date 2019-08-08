@@ -1,3 +1,9 @@
+/*
+ * Author:          Pramuka Perera
+ * Last Updated:    5 August 2019
+ * Description:     Control ACT LED on Raspi
+ */
+
 #include "led.h"
 
 void led_init (void) {
