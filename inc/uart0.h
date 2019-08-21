@@ -25,21 +25,26 @@
 #define UART0_CR_TXE 8
 #define UART0_CR_UARTEN 0
 
-
 #define UART0_FR_RXFE 4
 #define UART0_FR_TXFF 5
 #define UART0_FR_RXFF 6
 #define UART0_FR_TXFE 7
 
-void uart0_init (void);
+#define BS 0x08 // \b
+#define CR 0x0D // \r
+#define NL 0x0A // \n
 
-void uart0_putChar (char c);
+void uart0_init (void);
 
 char uart0_getChar (void);
 
-void uart0_putString (char *str);
+char uart0_echoChar (void);
 
 void uart0_getString (char *str, uint32_t maxLength);
+
+void uart0_putChar (char c);
+
+void uart0_putString (char *str);
 
 #endif
 
