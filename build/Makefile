@@ -8,21 +8,24 @@ LSCRIPT=${BPATH}/linker.ld
 OPTIMIZATION_LVL=-O2
 
 ROOT=..
-IPATH=${ROOT}/inc
+CPATH=${ROOT}/src
+IPATH=${ROOT}/src/inc
 BPATH=${ROOT}/build
 
+# nostartfiles means no standard libraries are included
+# freestanding means the compiler doesn't assume that standard lib functions have their typical defintions
 CFLAGS=	-mfpu=vfp			\
 		-mfloat-abi=hard	\
 		-march=armv6zk		\
 		-mtune=arm1176jzf-s	\
 		-nostartfiles		\
+	   	-ffreestanding		\
 	   	${OPTIMIZATION_LVL}	\
 	   	-Wall				\
 	   	-Wextra				\
-	   	${patsubst %,-I%,${subst :, ,${IPATH}}}	# borrowed directly from Tivaware Makefile
+	   	${patsubst %,-I%,${subst :, ,${IPATH}}}	# borrowed directly from Tivaware Makefile, path to header files
 #		-mcpu=arm1176jzf-s	\	
 #	   	-fpic				\
-#	   	-ffreestanding		\
 #	   	-std=gnu99			
 
 AFLAGS=	-mfpu=vfp			\
@@ -30,10 +33,10 @@ AFLAGS=	-mfpu=vfp			\
 		-march=armv6zk		\
 		-mtune=arm1176jzf-s	\
 		-nostartfiles		\
+	   	-ffreestanding		\
 	   	${patsubst %,-I%,${subst :, ,${IPATH}}} # borrowed directly from Tivaware Makefile
 #		-mcpu=arm1176jzf-s	\
 #	   	-fpic				\
-#	   	-ffreestanding		\
 
 #LFLAGS=-T ${LSCRIPT}		\
 #	   -ffreestanding		\
@@ -48,6 +51,7 @@ LFLAGS=	-mfpu=vfp			\
 	   	
 MAIN=kernel
 
+# Makefile build defintions
 # generate OS image
 #${BPATH}/%.img: %.elf
 #	${OBJCPY} ${<} -O binary ${@}	
@@ -59,11 +63,11 @@ ${BPATH}/%.elf:
 	${OBJCPY} ${@} -O binary ${@:.elf=.img}	# file extension substitution modified from Tivaware
 
 # generate object code for assembly file
-${BPATH}/%.o: %.s
+${BPATH}/%.o: ${CPATH}/%.s
 	${CC} ${AFLAGS} -o ${@} -c ${<}
 
 # generate object code for c file
-${BPATH}/%.o: %.c
+${BPATH}/%.o: ${CPATH}/%.c
 	${CC} ${CFLAGS} -o ${@} -c ${<}
 
 # Rules
@@ -76,12 +80,14 @@ ${BPATH}/${MAIN}.elf: ${BPATH}/common.o
 #${BPATH}/${MAIN}.elf: ${BPATH}/boot.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/uart0.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/led.o
+#${BPATH}/${MAIN}.elf: ${BPATH}/shell.o
 
-${BPATH}/${MAIN}.o: ${MAIN}.c
-${BPATH}/common.o: common.c
-#${BPATH}/boot.o: boot.s
-${BPATH}/uart0.o: uart0.c
-${BPATH}/led.o: led.c
+${BPATH}/${MAIN}.o: ${CPATH}/${MAIN}.c
+${BPATH}/common.o: ${CPATH}/common.c
+#${BPATH}/boot.o: ${CPATH}/boot.s
+${BPATH}/uart0.o: ${CPATH}/uart0.c
+${BPATH}/led.o: ${CPATH}/led.c
+#${BPATH}/shell.o: ${CPATH}/shell.c
 
 load:
 	rm ../build/disk/kernel.img

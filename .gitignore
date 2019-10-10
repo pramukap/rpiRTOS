@@ -1,4 +1,6 @@
-/build
+/build/*.img
+/build/*.elf
+/build/*.o
 /res
 notes
 
