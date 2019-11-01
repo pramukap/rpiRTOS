@@ -3,6 +3,7 @@
 # Definitions
 CC=arm-none-eabi-gcc
 OBJCPY=arm-none-eabi-objcopy
+OBJDUMP=arm-none-eabi-objdump
 
 LSCRIPT=${BPATH}/linker.ld
 OPTIMIZATION_LVL=-O2
@@ -23,9 +24,9 @@ CFLAGS=	-mfpu=vfp			\
 	   	${OPTIMIZATION_LVL}	\
 	   	-Wall				\
 	   	-Wextra				\
+	   	-fpic				\
 	   	${patsubst %,-I%,${subst :, ,${IPATH}}}	# borrowed directly from Tivaware Makefile, path to header files
 #		-mcpu=arm1176jzf-s	\	
-#	   	-fpic				\
 #	   	-std=gnu99			
 
 AFLAGS=	-mfpu=vfp			\
@@ -93,12 +94,20 @@ load:
 	rm ../build/disk/kernel.img
 	cp ../build/kernel.img ../build/disk/
 
+dump: ${BPATH}/${MAIN}.elf
+	${OBJDUMP} --full-contents ${BPATH}/${MAIN}.elf > kernel.dump
+	${OBJDUMP} --disassemble ${BPATH}/${MAIN}.elf > kernel.S
+	${OBJDUMP} --all-headers ${BPATH}/${MAIN}.elf > kernel.info
+
 tty:
 	dmesg | grep tty 
 
 serial:
 	sudo minicom -s
 
-clean:
-	rm ${BPATH}/*.o ${BPATH}/*.elf ${BPATH}/*.img
+sll:
+	./elf2sll
+
+clean: ${BPATH}/${MAIN}.S ${BPATH}/${MAIN}.info
+	rm ${BPATH}/*.o ${BPATH}/*.elf ${BPATH}/*.img ${BPATH}/*.dump ${BPATH}/*.S ${BPATH}/*.info ${BPATH}/temp ${BPATH}/*.sll
 

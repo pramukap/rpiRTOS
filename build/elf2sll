@@ -1,0 +1,23 @@
+#!/bin/bash
+
+BPATH=~/src/rpiRTOS/build/
+
+# Generate disassembly and metadata from elf
+make dump
+
+# Grab important data from generated files
+grep "start address"    kernel.info > kernel.sll
+grep "[0-9]\s.text\s[0-9,a-f]*\s[0-9,a-f]*"     kernel.info > temp 
+grep "[0-9]\s.data\s[0-9,a-f]*\s[0-9,a-f]*"     kernel.info >> temp 
+grep "[0-9]\s.rodata\s[0-9,a-f]*\s[0-9,a-f]*"   kernel.info >> temp 
+grep "[0-9]\s.bss\s[0-9,a-f]*\s[0-9,a-f]*"      kernel.info >> temp 
+grep "[0-9]\s.got\s[0-9,a-f]*\s[0-9,a-f]*"      kernel.info >> temp 
+cut temp --characters=5-37 >> kernel.sll 
+cut kernel.S --delimiter=" " --field=5 >> kernel.sll
+
+# Get rid of blank lines
+sed -i '/^$/d' kernel.sll
+#cat kernel.sll | tr [:space:] ':' > kernel.sll
+sed -i 's/start address/start_addr/' kernel.sll
+sed -i 's/      //' kernel.sll
+sed -i 's/\t/ /' kernel.sll
