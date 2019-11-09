@@ -81,6 +81,7 @@ ${BPATH}/${MAIN}.elf: ${BPATH}/common.o
 #${BPATH}/${MAIN}.elf: ${BPATH}/boot.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/uart0.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/led.o
+${BPATH}/${MAIN}.elf: ${BPATH}/heap.o
 #${BPATH}/${MAIN}.elf: ${BPATH}/shell.o
 
 ${BPATH}/${MAIN}.o: ${CPATH}/${MAIN}.c
@@ -88,6 +89,7 @@ ${BPATH}/common.o: ${CPATH}/common.c
 #${BPATH}/boot.o: ${CPATH}/boot.s
 ${BPATH}/uart0.o: ${CPATH}/uart0.c
 ${BPATH}/led.o: ${CPATH}/led.c
+${BPATH}/heap.o: ${CPATH}/heap.c
 #${BPATH}/shell.o: ${CPATH}/shell.c
 
 load:
@@ -108,6 +110,6 @@ serial:
 sll:
 	./elf2sll
 
-clean: ${BPATH}/${MAIN}.S ${BPATH}/${MAIN}.info
+clean: 
 	rm ${BPATH}/*.o ${BPATH}/*.elf ${BPATH}/*.img ${BPATH}/*.dump ${BPATH}/*.S ${BPATH}/*.info ${BPATH}/temp ${BPATH}/*.sll
 
