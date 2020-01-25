@@ -50,12 +50,16 @@ void uart0_putChar (char c) {
 
 void uart0_putString (char *str) {
 	uint32_t i;
+    
+    if (str == NULL) {
+        return;
+    }
 
 	for (i = 0; str[i] != '\0'; i++) {
 		uart0_putChar (str[i]);
 	}
 
-	uart0_putChar (str[i]);
+//	uart0_putChar (str[i]);
 }
 
 char uart0_getChar (void) {

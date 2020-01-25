@@ -84,6 +84,9 @@ ${BPATH}/${MAIN}.elf: ${BPATH}/led.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/heap.o
 #${BPATH}/${MAIN}.elf: ${BPATH}/shell.o
 
+${BPATH}/${MAIN}.elf: ${BPATH}/heapTest.o
+${BPATH}/${MAIN}.elf: ${BPATH}/uart0Test.o
+
 ${BPATH}/${MAIN}.o: ${CPATH}/${MAIN}.c
 ${BPATH}/common.o: ${CPATH}/common.c
 #${BPATH}/boot.o: ${CPATH}/boot.s
@@ -92,9 +95,16 @@ ${BPATH}/led.o: ${CPATH}/led.c
 ${BPATH}/heap.o: ${CPATH}/heap.c
 #${BPATH}/shell.o: ${CPATH}/shell.c
 
+${BPATH}/heapTest.o: ${CPATH}/heapTest.c
+${BPATH}/uart0Test.o: ${CPATH}/uart0Test.c
+
 load:
 	rm ../build/disk/kernel.img
 	cp ../build/kernel.img ../build/disk/
+
+unmount:
+	sudo umount /dev/mmcblk0p1
+	sudo umount /dev/mmcblk0p2
 
 dump: ${BPATH}/${MAIN}.elf
 	${OBJDUMP} --full-contents ${BPATH}/${MAIN}.elf > kernel.dump

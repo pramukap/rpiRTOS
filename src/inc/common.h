@@ -7,6 +7,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 #define SUCCESS 0
@@ -23,5 +24,6 @@
 
 char bitToChar (uint32_t bit);
 
+char *intToString (uintptr_t num, char *buff, int32_t size);
 #endif 
 

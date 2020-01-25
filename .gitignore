@@ -1,6 +1,12 @@
 /build/*.img
 /build/*.elf
 /build/*.o
+/build/*.dump
+/build/*.info
+/build/*.sll
+/build/*.S
+/build/temp
 /res
+/hwFiles
 notes
 
