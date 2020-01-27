@@ -14,12 +14,16 @@ int main () {
 	led_init ();	
     heap_init ();
 
-    uart0Test_longIntString ();
+//    uart0Test_longIntString ();
 
-//    heapTest_recycleMemory ();
-//    heapTest_twoArrays ();
+    heapTest_allocFail ();
+    heapTest_dataAlignment ();
+    heapTest_recycleMemory ();
+    heapTest_twoArrays ();
     heapTest_freeBlockTooSmall ();
-//    heapTest_currAbsorbsNext (); 
+    heapTest_freeBlockGoldilocks ();
+    heapTest_currAbsorbsNext (); 
+    heapTest_currAbsorbedByPrev (); 
 
 	while (1) {
         uart0_getString (str, 32);

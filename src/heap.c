@@ -29,6 +29,7 @@ void heap_init (void) {
     uart0_putString ("Heap Size: ");
     uart0_putString (intToString (HEAP_SIZE, str, STR_LEN));
     uart0_putString ("\n\r");
+    uart0_putString ("\n\r");
 }
 
 // first fit policy
@@ -40,9 +41,9 @@ void *heap_allocate (uint32_t size) {
    
     // if block does not exist, then you've hit the end of the heap
     while (currBlock != NULL) {
-        uart0_putString ("Heap CurrBlock Address: ");
-        uart0_putString (intToString ((uint32_t)currBlock, str, STR_LEN));
-        uart0_putString ("\n\r");
+//        uart0_putString ("Heap CurrBlock Address: ");
+//        uart0_putString (intToString ((uint32_t)currBlock, str, STR_LEN));
+//        uart0_putString ("\n\r");
         
         if (currBlock->state == FREE) {
             // if the block is too small, 
@@ -84,23 +85,23 @@ void *heap_allocate (uint32_t size) {
                 currBlock->state = ALLOCATED;
                 currBlock->next = nextBlock;
 
-                uart0_putString ("currBlock->next address: ");
-                uart0_putString (intToString ((uint32_t)(currBlock->next), str, STR_LEN));
-                uart0_putString ("| currBlock->prev address: ");
-                uart0_putString (intToString ((uint32_t)(currBlock->prev), str, STR_LEN));
-                uart0_putString ("| nextBlock->next address: ");
-                uart0_putString (intToString ((uint32_t)(nextBlock->next), str, STR_LEN));
-                uart0_putString ("| nextBlock->prev address: ");
-                uart0_putString (intToString ((uint32_t)(nextBlock->prev), str, STR_LEN));
-                uart0_putString ("\n\r");
-
-                uart0_putString ("Allocated Mem Start Address: ");
-                uart0_putString (intToString ((uint32_t)currBlock, str, STR_LEN));
-                uart0_putString ("/ heap_allocate Return Address: ");
-                uart0_putString (intToString ((uint32_t)((uint8_t *)currBlock + sizeof(heapData)), str, STR_LEN));
-                uart0_putString ("/ heapData size: ");
-                uart0_putString (intToString ((uint32_t)(sizeof(heapData)), str, STR_LEN));
-                uart0_putString ("\n\r");
+//                uart0_putString ("currBlock->next address: ");
+//                uart0_putString (intToString ((uint32_t)(currBlock->next), str, STR_LEN));
+//                uart0_putString ("| currBlock->prev address: ");
+//                uart0_putString (intToString ((uint32_t)(currBlock->prev), str, STR_LEN));
+//                uart0_putString ("| nextBlock->next address: ");
+//                uart0_putString (intToString ((uint32_t)(nextBlock->next), str, STR_LEN));
+//                uart0_putString ("| nextBlock->prev address: ");
+//                uart0_putString (intToString ((uint32_t)(nextBlock->prev), str, STR_LEN));
+//                uart0_putString ("\n\r");
+//
+//                uart0_putString ("Allocated Mem Start Address: ");
+//                uart0_putString (intToString ((uint32_t)currBlock, str, STR_LEN));
+//                uart0_putString ("/ heap_allocate Return Address: ");
+//                uart0_putString (intToString ((uint32_t)((uint8_t *)currBlock + sizeof(heapData)), str, STR_LEN));
+//                uart0_putString ("/ heapData size: ");
+//                uart0_putString (intToString ((uint32_t)(sizeof(heapData)), str, STR_LEN));
+//                uart0_putString ("\n\r");
                 
                 return (void *)(((uint8_t *)currBlock) + sizeof(heapData)); // currBlock must be cast as uint8_t ptr because of pointer arithmetic
             }
@@ -118,24 +119,28 @@ void heap_free (void *ptr) {
     heapData *nextBlock = currBlock->next;
     heapData *prevBlock = currBlock->prev;
 
+    if (ptr == NULL) {
+        return;
+    }
+
     currBlock->state = FREE;
     
     // curr block absorbs next block if next block is also free
     if (nextBlock != NULL && nextBlock->state == FREE) {
-        uart0_putString ("Current block absorbing next block\n\r");
-        uart0_putString ("Address of next block: ");
-        uart0_putString (intToString ((uint32_t)nextBlock, str, STR_LEN));
-        uart0_putString ("\n\r");
+//        uart0_putString ("Current block absorbing next block\n\r");
+//        uart0_putString ("Address of next block: ");
+//        uart0_putString (intToString ((uint32_t)nextBlock, str, STR_LEN));
+//        uart0_putString ("\n\r");
         currBlock->size = currBlock->size + sizeof(heapData) + nextBlock->size;
         currBlock->next = nextBlock->next;
     }
 
     // prev block absorbs curr block if prev block is also free
     if (prevBlock != NULL && prevBlock->state == FREE) {  
-        uart0_putString ("Previous block absorbing current block\n\r");
-        uart0_putString ("Address of previous block: ");
-        uart0_putString (intToString ((uint32_t)prevBlock, str, STR_LEN));
-        uart0_putString ("\n\r");
+//        uart0_putString ("Previous block absorbing current block\n\r");
+//        uart0_putString ("Address of previous block: ");
+//        uart0_putString (intToString ((uint32_t)prevBlock, str, STR_LEN));
+//        uart0_putString ("\n\r");
         prevBlock->size = prevBlock->size + sizeof(heapData) + currBlock->size;
         prevBlock->next = currBlock->next;
     }
