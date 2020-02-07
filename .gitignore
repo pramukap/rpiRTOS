@@ -5,8 +5,14 @@
 /build/*.info
 /build/*.sll
 /build/*.S
+/build/*.ser
 /build/temp
+/build/disk
+
+/src/template
+
 /res
 /hwFiles
+
 notes
 
