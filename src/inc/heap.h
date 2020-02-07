@@ -16,6 +16,7 @@
 #define ALLOCATED 1
 
 #define DATA_ALIGN_SIZE 4
+#define BYTES_PER_LINE 16
 
 typedef struct heapMetaData heapData;
 
@@ -31,5 +32,7 @@ void heap_init (void);
 void *heap_allocate (uint32_t size);
 
 void heap_free (void *ptr);
+
+void heap_dump (void);
 
 #endif

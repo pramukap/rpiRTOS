@@ -96,8 +96,9 @@ void uart0_getString (char *str, uint32_t maxLength) {
     uint32_t i;
 
     // remember i is the index
+    // maxLength - 1 to accomodate null terminator
     i = 0;
-	while (i < maxLength && (str[i] = uart0_echoChar ()) != CR) {
+	while (i < (maxLength - 1) && (str[i] = uart0_echoChar ()) != CR) {
         if (str[i] == BS) {
             // go back two characters to 
             // overwrite the character that was deleted 

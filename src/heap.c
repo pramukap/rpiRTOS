@@ -148,3 +148,17 @@ void heap_free (void *ptr) {
     return;
 }
 
+void heap_dump (void) {
+    for (int i = 0; i < HEAP_SIZE; i += BYTES_PER_LINE) {
+        uart0_putString ("OFFSET ");
+        uart0_putString (intToString(i, str, STR_LEN));
+        uart0_putString (": ");
+
+        for (int j = 0; j < BYTES_PER_LINE; j++) {
+            uart0_putString (intToString(heap[i + j], str, STR_LEN));
+            uart0_putString (" ");
+        }
+
+        uart0_putString ("\n\r");
+    }
+}

@@ -7,8 +7,8 @@
 #include "kernel.h"
 
 int main () {
-    char str[33];
-    str[32] = '\0';
+    char str[150];
+    str[149] = '\0';
 
     uart0_init ();
 	led_init ();	
@@ -25,9 +25,16 @@ int main () {
     heapTest_currAbsorbsNext (); 
     heapTest_currAbsorbedByPrev (); 
 
+//    heap_dump();
+    uart0_putString (
+        intToString (stringToInt ("1221221221"), str, 100)
+    );
+    uart0_putString ("\n\r");
+
 	while (1) {
-        uart0_getString (str, 32);
-		led_toggle ();
+        uart0_getString (str, 100);
+
+ 		led_toggle ();
         for (delayCount = 0; delayCount < 500000; delayCount++);
 	}
 
