@@ -4,9 +4,7 @@
  * Description:     Talk to laptop console via UART
  */
 
-#include "common.h"
 #include "uart0.h"
-#include "gpio.h"
 
 void uart0_init (void) {
     // Disable UART0
@@ -23,6 +21,31 @@ void uart0_init (void) {
 	// set packet options
 	UART0_LCRH = 0x00000000;	// start with everything off
 	UART0_LCRH |= WLEN_8 << UART0_LCRH_WLEN;	// data length 8 bits
+
+    // set interrupts
+    #if EN_UART0_INTR
+        // enable rx interrupt
+        #if EN_UART0_RX_INTR
+            // set rx interrupt mask
+            UART0_IMSC &= ~(1 << UART0_IMSC_RXIM);
+            UART0_IMSC |= 1 << UART0_IMSC_RXIM;
+
+            // set fifo level at which interrupt occurs
+            UART0_IFLS &= ~(7 << UART0_IFLS_RXIFLSEL);
+            UART0_IFLS |= EIGHTH_FULL << UART0_IFLS_RXIFLSEL;
+        #endif 
+
+        // enable tx interrupt
+        #if EN_UART0_TX_INTR
+            // set tx interrupt mask
+            UART0_IMSC &= ~(1 << UART0_IMSC_TXIM);
+            UART0_IMSC |= 1 << UART0_IMSC_TXIM;
+
+            // set fifo level at which interrupt occurs
+            UART0_IFLS &= ~(7 << UART0_IFLS_TXIFLSEL);
+            UART0_IFLS |= EIGHTH_FULL << UART0_IFLS_TXIFLSEL;
+        #endif
+    #endif
 
 	// flush fifos in order to program ctrl reg
 	UART0_LCRH &= ~(1 << UART0_LCRH_FEN);

@@ -9,6 +9,8 @@
 
 #include <stddef.h>
 #include <stdint.h>
+
+#include "interrupts.h"
 #include "uart0.h"
 #include "led.h"
 #include "heap.h"

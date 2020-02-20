@@ -5,7 +5,7 @@ CC=arm-none-eabi-gcc
 OBJCPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 
-LSCRIPT=${BPATH}/linker.ld
+LSCRIPT=${BPATH}/kernel.ld
 OPTIMIZATION_LVL=-O2
 
 ROOT=..
@@ -39,7 +39,7 @@ AFLAGS=	-mfpu=vfp			\
 #		-mcpu=arm1176jzf-s	\
 #	   	-fpic				\
 
-#LFLAGS=-T ${LSCRIPT}		\
+#LFLAGS=-T ${LSCRIPT}		
 #	   -ffreestanding		\
 #	   ${OPTIMIZATION_LVL}	\
 #	   -nostdlib
@@ -49,6 +49,7 @@ LFLAGS=	-mfpu=vfp			\
 		-march=armv6zk		\
 		-mtune=arm1176jzf-s	\
 		-nostartfiles		\
+		-T ${LSCRIPT}
 	   	
 MAIN=kernel
 
@@ -78,6 +79,7 @@ all: ${BPATH}/${MAIN}.elf
 
 ${BPATH}/${MAIN}.elf: ${BPATH}/${MAIN}.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/common.o
+${BPATH}/${MAIN}.elf: ${BPATH}/interrupts.o
 #${BPATH}/${MAIN}.elf: ${BPATH}/boot.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/uart0.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/led.o
@@ -89,6 +91,7 @@ ${BPATH}/${MAIN}.elf: ${BPATH}/uart0Test.o
 
 ${BPATH}/${MAIN}.o: ${CPATH}/${MAIN}.c
 ${BPATH}/common.o: ${CPATH}/common.c
+${BPATH}/heap.o: ${CPATH}/interrupts.c
 #${BPATH}/boot.o: ${CPATH}/boot.s
 ${BPATH}/uart0.o: ${CPATH}/uart0.c
 ${BPATH}/led.o: ${CPATH}/led.c

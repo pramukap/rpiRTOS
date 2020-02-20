@@ -9,10 +9,16 @@
 int main () {
     char str[150];
     str[149] = '\0';
+    
+//    interrupts_disable ();
 
     uart0_init ();
 	led_init ();	
     heap_init ();
+
+//    interrupts_enable ();
+
+    interrupts_svc ();
 
 //    uart0Test_longIntString ();
 
