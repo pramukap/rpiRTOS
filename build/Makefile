@@ -6,7 +6,7 @@ OBJCPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 
 LSCRIPT=${BPATH}/kernel.ld
-OPTIMIZATION_LVL=-O2
+OPTIMIZATION_LVL=-O0
 
 ROOT=..
 CPATH=${ROOT}/src
@@ -35,9 +35,9 @@ AFLAGS=	-mfpu=vfp			\
 		-mtune=arm1176jzf-s	\
 		-nostartfiles		\
 	   	-ffreestanding		\
+	   	-fpic				\
 	   	${patsubst %,-I%,${subst :, ,${IPATH}}} # borrowed directly from Tivaware Makefile
 #		-mcpu=arm1176jzf-s	\
-#	   	-fpic				\
 
 #LFLAGS=-T ${LSCRIPT}		
 #	   -ffreestanding		\
@@ -80,6 +80,7 @@ all: ${BPATH}/${MAIN}.elf
 ${BPATH}/${MAIN}.elf: ${BPATH}/${MAIN}.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/common.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/interrupts.o
+${BPATH}/${MAIN}.elf: ${BPATH}/asmInterrupts.o
 #${BPATH}/${MAIN}.elf: ${BPATH}/boot.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/uart0.o
 ${BPATH}/${MAIN}.elf: ${BPATH}/led.o
@@ -92,6 +93,7 @@ ${BPATH}/${MAIN}.elf: ${BPATH}/uart0Test.o
 ${BPATH}/${MAIN}.o: ${CPATH}/${MAIN}.c
 ${BPATH}/common.o: ${CPATH}/common.c
 ${BPATH}/heap.o: ${CPATH}/interrupts.c
+${BPATH}/boot.o: ${CPATH}/asmInterrupts.s
 #${BPATH}/boot.o: ${CPATH}/boot.s
 ${BPATH}/uart0.o: ${CPATH}/uart0.c
 ${BPATH}/led.o: ${CPATH}/led.c
